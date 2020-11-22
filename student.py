@@ -1,6 +1,7 @@
 from __future__ import annotations
+
 import random
-from typing import List, Sequence
+from typing import List
 
 
 class State:
