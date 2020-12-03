@@ -1,5 +1,13 @@
-class Graph:
-    pass
+import random
+
+
+def translate_symbols(i: int) -> str:
+    d = {
+        0: 'rock',
+        1: 'paper',
+        2: 'scissors'
+    }
+    return d[i]
 
 
 def translate(i: int):
@@ -9,6 +17,15 @@ def translate(i: int):
         2: 'c'
     }
     return d[i]
+
+
+def translate_str(s: str):
+    d = {
+        'a': 0,
+        'b': 1,
+        'c': 2
+    }
+    return d[s]
 
 
 def print_matrix(rows: list, cols=3):
@@ -30,6 +47,27 @@ def print_matrix(rows: list, cols=3):
         print(row)
 
 
+def loses_to(i: int) -> int:
+    d = {
+        0: 1,
+        1: 2,
+        2: 0
+    }
+    return d[i]
+
+
+def chose(row: dict) -> int:
+    pop = list(row.keys())[:-1]
+    values = list(row.values())
+    count = values[len(row) - 1]
+    if count == 0:
+        return random.choice(pop)
+    transitions = values[:-1]
+    probability = [el / count for el in transitions]
+    next_move = random.choices(weights=probability, population=pop, k=3)
+    return loses_to(translate_str(next_move[0]))
+
+
 def main():
     a = {'a': 0, 'b': 0, 'c': 0, 'count': 0}
     b = {'a': 0, 'b': 0, 'c': 0, 'count': 0}
@@ -46,11 +84,12 @@ def main():
             prev = number
             continue
         if -1 < number < 3:
-            print(prev)
             key = translate(number)
-            print(prev)
             rows[prev][key] += 1
             rows[prev]['count'] += 1
+            c = chose(rows[prev])
+            print("you", translate_symbols(number), "vs", translate_symbols(c))
+            # print("you :", number, "me", translate_str(c))
             prev = number
             continue
 
