@@ -1,6 +1,8 @@
 from collections import Counter
 import random
 
+"""W pracy proszę też przedstawić ostateczną tablicę przejścia między stanami."""
+
 
 class RPS:
     def __init__(self):
@@ -51,6 +53,9 @@ class RPS:
         if prev is not None:
             foo = self.answers[prev]
             foo.append(current)
+        for k in self.answers.keys():
+            k0 = Counter(self.answers[k])
+            print(k0, end=" ")
 
     def get_freq(self, el: int) -> int:
         c = Counter(self.answers[el])
