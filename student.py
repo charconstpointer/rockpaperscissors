@@ -1,23 +1,22 @@
 from __future__ import annotations
 
 import random
-from typing import List
 
 
 class State:
     def __init__(self, name: str, state: int):
         self.state = state
         self.name = name
-        self.transitions: List[State] = []
+        self.transitions = {}
 
     def add_transition(self, state: State, p: float):
-        if len(self.transitions) == 10:
-            raise ValueError("p = 1 already")
-        self.transitions.extend(list([state for _ in range(int(p * 10))]))
+        self.transitions[state] = p
+        pass
 
     def move(self) -> State:
-        next_state = random.choice(self.transitions)
-        return next_state
+        proba = list(self.transitions.values())
+        next_state = random.choices(population=list(self.transitions.keys()), weights=proba, k=1)
+        return next_state[0]
 
 
 def main():

@@ -76,6 +76,11 @@ def main():
         games += 1
         if prev is None:
             prev = number
+            choice = chose(rows[prev])
+            player_choice = translate_symbols(number)
+            print("you", player_choice, "vs", choice)
+            points += get_score(player_choice, choice)
+            print("score", points)
             continue
         if -1 < number < 3:
             key = translate_symbols(number)
