@@ -72,17 +72,13 @@ def main():
         ans = input()
         if not str.isnumeric(ans):
             continue
+
         number = int(ans)
         games += 1
-        if prev is None:
-            prev = number
-            choice = chose(rows[prev])
-            player_choice = translate_symbols(number)
-            print("you", player_choice, "vs", choice)
-            points += get_score(player_choice, choice)
-            print("score", points)
-            continue
+
         if -1 < number < 3:
+            if prev is None:
+                prev = number
             key = translate_symbols(number)
             choice = chose(rows[prev])
             player_choice = translate_symbols(number)
@@ -93,8 +89,6 @@ def main():
             rows[prev]['count'] += 1
             prev = number
             continue
-
-    pass
 
 
 if __name__ == '__main__':
