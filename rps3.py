@@ -10,24 +10,6 @@ def translate_symbols(i: int) -> str:
     return d[i]
 
 
-def translate(i: int):
-    d = {
-        0: 'a',
-        1: 'b',
-        2: 'c'
-    }
-    return d[i]
-
-
-def translate_str(s: str):
-    d = {
-        'a': 0,
-        'b': 1,
-        'c': 2
-    }
-    return d[s]
-
-
 def print_matrix(rows: list, cols=3):
     for i, el in enumerate(rows):
         steps = list(el.values())[0:cols]
@@ -40,23 +22,19 @@ def print_matrix(rows: list, cols=3):
         for step in steps:
             probability = step / count
             row.append(float("{:.2f}".format(probability)))
-            # print("rb", row, probability)
-            # row.append(probability)
-            # print("ra", row)
-            # # print(row, end=" ")
         print(row)
 
 
-def loses_to(i: int) -> int:
+def loses_to(i: str) -> str:
     d = {
-        0: 1,
-        1: 2,
-        2: 0
+        'rock': 'paper',
+        'paper': 'scissors',
+        'scissors': 'rock'
     }
     return d[i]
 
 
-def chose(row: dict) -> int:
+def chose(row: dict) -> str:
     pop = list(row.keys())[:-1]
     values = list(row.values())
     count = values[len(row) - 1]
@@ -65,31 +43,49 @@ def chose(row: dict) -> int:
     transitions = values[:-1]
     probability = [el / count for el in transitions]
     next_move = random.choices(weights=probability, population=pop, k=3)
-    return loses_to(translate_str(next_move[0]))
+    return loses_to(next_move[0])
+
+
+def get_score(number: str, choice: str):
+    if number is choice:
+        return 0
+    lt = loses_to(number)
+    if choice is lt:
+        return -1
+    return 1
+    # lt = loses_to(choice)
+    # if number is lt:
+    #
+    # return 0
 
 
 def main():
-    a = {'a': 0, 'b': 0, 'c': 0, 'count': 0}
-    b = {'a': 0, 'b': 0, 'c': 0, 'count': 0}
-    c = {'a': 0, 'b': 0, 'c': 0, 'count': 0}
+    a = {'rock': 0, 'paper': 0, 'scissors': 0, 'count': 0}
+    b = {'rock': 0, 'paper': 0, 'scissors': 0, 'count': 0}
+    c = {'rock': 0, 'paper': 0, 'scissors': 0, 'count': 0}
     rows = [a, b, c]
     prev = None
+    games = 0
+    points = 0
     while True:
         print_matrix(rows, cols=3)
         ans = input()
         if not str.isnumeric(ans):
             continue
         number = int(ans)
+        games += 1
         if prev is None:
             prev = number
             continue
         if -1 < number < 3:
-            key = translate(number)
+            key = translate_symbols(number)
+            choice = chose(rows[prev])
+            player_choice = translate_symbols(number)
+            print("you", player_choice, "vs", choice)
+            points += get_score(player_choice, choice)
+            print("score", points)
             rows[prev][key] += 1
             rows[prev]['count'] += 1
-            c = chose(rows[prev])
-            print("you", translate_symbols(number), "vs", translate_symbols(c))
-            # print("you :", number, "me", translate_str(c))
             prev = number
             continue
 
